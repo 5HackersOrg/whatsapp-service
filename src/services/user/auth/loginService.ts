@@ -4,12 +4,13 @@ import { UsersAuthDb } from "../../../repository/users/auth/AuthDb.js";
 import { UserDb } from "../../../repository/users/user/UserDb.js";
 import { verifyAccessTokenOnboard } from "../../token/tokenService.js";
 import { setRefreshToken } from "./refreshTokenService.js";
-const authDb = new UsersAuthDb();
-const userDb = new UserDb();
+
 export const userLogin = async (email: string, password: string) => {
+  const authDb = new UsersAuthDb();
   return await authDb.login(email, password);
 };
 export const verifyOtp = async (email: string, otp: string) => {
+  const authDb = new UsersAuthDb();
   return await authDb.verifyOtp(email, otp);
 };
 export const onBoardPassService = async (
@@ -21,6 +22,7 @@ export const onBoardPassService = async (
   status: number;
   data?: any;
 }> => {
+  const userDb = new UserDb();
   try {
     const res = await verifyAccessTokenOnboard(access_token);
     if (!res) {

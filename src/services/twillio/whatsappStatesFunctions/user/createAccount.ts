@@ -8,8 +8,10 @@ import { generateCustomerWindowTimeout } from "../../../../utils/whatsapp/isVali
 import { EmailService } from "../../../email/emailService.js";
 import type { stateParams } from "../../whatappStateHelper.js";
 import { sendWhatsAppMessage } from "../../whatsappMessages/sendWhatsappMessage.js";
-const jobSeekersDb = new JobSeekerDb();
-const emailService = new EmailService();
+
+export const jobSeekersDb = new JobSeekerDb();
+export const emailService = new EmailService();
+
 const EmailError = async (body: MessageInfo) => {
   await sendWhatsAppMessage(body.userPhoneNumber, {
     type: "text",
@@ -55,17 +57,17 @@ export const createAccount = async ({
             userId,
             customerServiceTimeout: generateCustomerWindowTimeout(),
           });
+
+          await sendWhatsAppMessage(body.userPhoneNumber, {
+            type: "text",
+            text: MESSAGES.OTP_SENT,
+          });
         } catch (err) {
           await sendWhatsAppMessage(body.userPhoneNumber, {
             type: "text",
             text: MESSAGES.SERVER_ERROR,
           });
         }
-
-        await sendWhatsAppMessage(body.userPhoneNumber, {
-          type: "text",
-          text: MESSAGES.OTP_SENT,
-        });
       } else {
         await EmailError(body);
       }
